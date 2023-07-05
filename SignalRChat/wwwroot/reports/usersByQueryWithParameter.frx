@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="06/09/2023 15:24:26" ReportInfo.Modified="06/09/2023 16:56:34" ReportInfo.CreatorVersion="2023.2.17.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+
+    private void Label1_Click(object sender, EventArgs e)
+    {
+      
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqV5n69Z/jZBbOIkct1sJuR2o6KXqqllxbk6zuJm5J5u8akSIWcqvCVDvLMaOe2TOFLS4ELWe6FLX3LAR84fP2z/LPEL5vbcyiioYtMH44HtNdS5m1y0OkFksjoNBvAfp6GW+THIDShDNI5B+ybLpraX5Zycyr4OCUa2fv6D5iQciFbwV0QwncxN+2DUBSNxLXUrzTpIRYH4sT7yYj0i5yqg==">
+      <TableDataSource Name="Table" Alias="users" DataType="System.Int32" Enabled="true" SelectCommand="SELECT *&#13;&#10;FROM [IDENTITY].Users&#13;&#10;WHERE Id = IsNull(@id, Id)">
+        <Column Name="Id" DataType="System.String"/>
+        <Column Name="FirstName" DataType="System.String"/>
+        <Column Name="LastName" DataType="System.String"/>
+        <Column Name="ProfilePhotoUrl" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.String"/>
+        <Column Name="UserName" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="PhoneNumber" DataType="System.String"/>
+        <CommandParameter Name="id" DataType="12" Expression="[id]"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="id" DataType="System.String" AsString="fa73abec-1e32-4fef-8a8b-adf0abfce589"/>
+    <Parameter Name="generatedBy" DataType="System.String" AsString="Salman"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="37.8">
+      <TextObject Name="Text15" Left="217.35" Top="9.45" Width="245.7" Height="18.9" Text="Personal Information" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="41.8" Width="718.2" Height="28.35"/>
+    <DataBand Name="Data1" Top="74.15" Width="718.2" Height="217.35" DataSource="Table">
+      <TextObject Name="Text16" Left="9.45" Width="132.3" Height="18.9" Text="ID" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text17" Left="9.45" Top="28.35" Width="132.3" Height="18.9" Text="Full Name" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text18" Left="9.45" Top="56.7" Width="132.3" Height="18.9" Text="UserName" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text19" Left="9.45" Top="85.05" Width="132.3" Height="18.9" Text="Email" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text20" Left="9.45" Top="113.4" Width="132.3" Height="18.9" Text="Phone Number" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text21" Left="141.75" Width="94.5" Height="18.9" Text=":" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text22" Left="141.75" Top="28.35" Width="94.5" Height="18.9" Text=":" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text23" Left="141.75" Top="56.7" Width="94.5" Height="18.9" Text=":" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text24" Left="141.75" Top="85.05" Width="94.5" Height="18.9" Text=":" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text25" Left="141.75" Top="113.4" Width="94.5" Height="18.9" Text=":" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text26" Left="236.25" Width="444.15" Height="18.9" Text="[users.Id]" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text27" Left="236.25" Top="28.35" Width="444.15" Height="18.9" Text="[users.FirstName] [users.LastName]" Font="Arial, 12pt, style=Bold">
+        <Formats>
+          <GeneralFormat/>
+          <GeneralFormat/>
+        </Formats>
+      </TextObject>
+      <TextObject Name="Text28" Left="236.25" Top="56.7" Width="444.15" Height="18.9" Text="[users.UserName]" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text29" Left="236.25" Top="85.05" Width="444.15" Height="18.9" Text="[users.Email]" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text30" Left="236.25" Top="113.4" Width="444.15" Height="18.9" Text="[users.PhoneNumber]" Font="Arial, 12pt, style=Bold"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="295.5" Width="718.2" Height="18.9">
+      <TextObject Name="Text13" Left="9.45" Width="255.15" Height="18.9" Text="Printed On:  [Date]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text31" Left="500.85" Width="179.55" Height="18.9" Text="Triangle ChatBot" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

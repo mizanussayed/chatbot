@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SignarlRChat.Interface
+namespace SignalRChat.Interface
 {
     public interface IToastNotification
     {

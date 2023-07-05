@@ -5,9 +5,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
-using SignarlRChat.Areas.Admin.Models;
-using SignarlRChat.DTOs;
-using SignarlRChat.Interface;
+using SignalRChat.Areas.Admin.Models;
+using SignalRChat.DTOs;
+using SignalRChat.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace SignarlRChat.Areas.Identity.Pages.Account
+namespace SignalRChat.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel

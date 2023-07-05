@@ -1,0 +1,225 @@
+﻿.card-body {
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    /*min-height: 450px;*/
+    height: 66vh;
+}
+
+#user-group-wrapper {
+    border-right: 2px solid #e0e0e0;
+    height: 66vh;
+}
+
+#UserListContainer {
+    /*height: 33vh;*/
+    height: calc(34vh - 23px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    #UserListContainer::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    #UserListContainer::-webkit-scrollbar-track {
+        background: none;
+    }
+
+    #UserListContainer::-webkit-scrollbar-thumb {
+        background-color: var(--thumbBG);
+        border-radius: 6px;
+    }
+
+#GroupListContainer {
+    height: calc(28vh - 23px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    #GroupListContainer::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    #GroupListContainer::-webkit-scrollbar-track {
+        background: none;
+    }
+
+    #GroupListContainer::-webkit-scrollbar-thumb {
+        background-color: var(--thumbBG);
+        border-radius: 6px;
+    }
+
+.user-group-title {
+    color: #012970;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#notiIcon {
+    background: none;
+    padding: 0;
+    margin: 0;
+    appearance: none;
+    border: none !important;
+    outline: none !important;
+    margin-right: 200px;
+    position: relative;
+}
+
+    #notiIcon:hover {
+        background-color: silver;
+        border-radius: 100%;
+    }
+
+.btn-check:focus + .btn-outline-secondary, .btn-outline-secondary:focus {
+    box-shadow: none !important;
+}
+
+#notify-bell {
+    font-size: 25px;
+    padding: 5px;
+}
+
+/*    #notificationCount {
+            border-radius: 100%;
+            padding: 4.20px;
+            position: absolute;
+            left: 16px;
+            top: -6px;
+        }*/
+
+.people-list {
+    -moz-transition: .5s;
+    -o-transition: .5s;
+    -webkit-transition: .5s;
+    transition: .5s
+}
+
+    .people-list .chat-list li {
+        padding: 10px 0px;
+        padding-left: 15px;
+        list-style: none;
+        border-radius: 3px;
+        width:  100%;
+    }
+
+        .people-list .chat-list li:hover {
+            background: #efefef;
+            cursor: pointer
+        }
+
+.active {
+    background: #efefef !important
+}
+
+.people-list .chat-list li .name {
+    font-size: 1rem;
+    color: #012970;
+    font-weight: 500;
+}
+
+.people-list .chat-list img {
+    width: 45px;
+    border-radius: 50%;
+}
+
+.people-list img {
+    float: left;
+    border-radius: 50%
+}
+
+.people-list .about {
+    float: left;
+    padding-left: 8px;
+    width: calc(100% - 50px);
+}
+
+.people-list .status {
+    color: #999;
+    font-size: 13px
+}
+
+.people-list .notifiyIconBadge{
+    float: right !important;
+    margin-right: 4px;
+}
+
+.groupPhoto {
+    width: 45px;
+    border-radius: 50%
+}
+
+.online {
+    color: #86c541
+}
+
+.offline {
+    color: #e47297
+}
+
+.me {
+    color: #1d8ecd
+}
+
+.card-header {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.profileAvatar {
+    width: 35px;
+    border-radius: 50%;
+}
+
+.textGradient {
+    /*background: -webkit-linear-gradient(#eee, #333);*/
+    background: -webkit-linear-gradient(135deg, #71b7e6, #9b59b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+    .navbar-brand img {
+        width: 32px;
+        height: 32px;
+        margin-right: 5px;
+    }
+
+.card-header-custom {
+    padding: 0px;
+}
+
+#msgMainContainer {
+    background-image: url('/images/whatsbgimage.png');
+    padding-left: 0px;
+    padding-right: 0px;
+    background-size: cover;
+    height: 66vh;
+}
+
+#loadConversions {
+    height: 66vh;
+}
+
+.fa-paperclip {
+    font-size: 20px;
+    color: #435f7a;
+    cursor: pointer;
+    opacity: .5;
+    margin-top: 3px;
+}
+
+    .fa-paperclip:hover {
+        opacity: 1;
+    }
+
+#msgContent:focus {
+    box-shadow: none;
+}

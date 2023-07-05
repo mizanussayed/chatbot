@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace SignarlRChat.Extensions
+namespace SignalRChat.Extensions
 {
     public static class EnumExtension
     {

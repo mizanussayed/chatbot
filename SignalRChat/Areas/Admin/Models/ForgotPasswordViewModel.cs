@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SignarlRChat.Areas.Admin.Models
+namespace SignalRChat.Areas.Admin.Models;
+
+public class ForgotPasswordViewModel
 {
-    public class ForgotPasswordViewModel
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = string.Empty;
-    }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = string.Empty;
 }

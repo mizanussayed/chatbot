@@ -1,0 +1,115 @@
+﻿@using SignalRChat.Constant;
+@using SignalRChat.Service;
+@using Microsoft.AspNetCore.Identity;
+@using Newtonsoft.Json;
+@inject IHttpContextAccessor accessor;
+@inject CustomSignInManager<ApplicationUser> _signInManager;
+@inject UserManager<ApplicationUser> _userManager;
+@{
+    dynamic msgObject = null;
+    if (TempData["Message"] is not null)
+    {
+        msgObject = (dynamic)JsonConvert.DeserializeObject(TempData["Message"].ToString());
+    }
+    var status = "";
+    var msg = "";
+    if (msgObject is not null)
+    {
+        status = msgObject?.Status;
+        msg = msgObject?.Message;
+    }
+    //if (accessor.HttpContext?.Session.GetString("ToastNotify") is not null)
+    //{
+    //   var toast =  JsonConvert.DeserializeObject<ToastAppNotification>(accessor.HttpContext.Session.GetString("ToastNotify"));
+    //}
+    var appUser = await _userManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]  Triangle ChatBot</title>
+
+    <partial name="_stylesPartial" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    @*<link rel="stylesheet" href="/SignalRChat.styles.css" asp-append-version="true" />*@
+    <style>
+        footer .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            white-space: nowrap;
+            line-height: 60px;
+    </style>
+</head>
+<body>
+    @if (_signInManager.IsSignedIn(User) && (await _userManager.IsInRoleAsync(appUser, Roles.SuperAdmin.ToString()) || await _userManager.IsInRoleAsync(appUser, Roles.Admin.ToString())))
+    {
+        <header class="container">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="Chat" asp-controller="Chat" asp-action="Index" style="background-image: linear-gradient(135deg, #4A00E0, #2ebf91 ); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Triangle ChatBot</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Role" asp-action="Index">Role</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Chat" asp-controller="Chat" asp-action="Index">ChatBot</a>
+                            </li>
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+        <partial name="_FileShowModal" />
+        <partial name="_formModal" />
+    </div>
+
+    <footer class="border-top footer text-muted text-center">
+        <div class="container">
+            &copy; 2023 - Triangle ChatBot
+        </div>
+    </footer>
+    <partial name="_scriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+
+        if ('@status' == 'Success') {
+            debugger;
+            toastr.success(`@msg`, `@status`);
+        }
+        else if ('@status' == 'Error') {
+            toastr.error(`@msg`, `@status`);
+        }
+        else if ('@status' == 'Warning') {
+            toastr.warning(`@msg`, `@status`);
+        }
+        else if ('@status' == 'Info') {
+            toastr.info(`@msg`, `@status`);
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

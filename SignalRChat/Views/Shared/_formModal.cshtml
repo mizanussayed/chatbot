@@ -1,0 +1,41 @@
+﻿<style>
+    .modal-header {
+        padding: 8px 16px !important;
+    }
+
+    .title {
+        margin-bottom: 0px !important;
+    }
+
+    .icon-close {
+        float: right;
+        width: 32px;
+        height: 32px;
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 0rem;
+        text-shadow: 0 1px 0 #fff;
+        color: #F23338 !important;
+        transition: width 1s, height 1s, transform 1s;
+
+    }
+
+        .icon-close:hover {
+            background: #FEE7E8;
+            transform: rotate(90deg);
+        }
+</style>
+@*Modal for create a user group*@
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="modalHeaderTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title title" id="modalHeaderTitle"></h5>
+                <span class="icon-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x"></i></span>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for create a user group*@

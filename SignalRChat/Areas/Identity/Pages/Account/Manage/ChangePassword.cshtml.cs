@@ -5,13 +5,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using SignarlRChat.Entity;
+using SignalRChat.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace SignarlRChat.Areas.Identity.Pages.Account.Manage
+namespace SignalRChat.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {

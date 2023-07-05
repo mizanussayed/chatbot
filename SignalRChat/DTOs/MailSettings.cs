@@ -1,4 +1,4 @@
-﻿namespace SignarlRChat.DTOs
+﻿namespace SignalRChat.DTOs
 {
     public class MailSettings
     {

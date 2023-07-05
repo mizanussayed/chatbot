@@ -1,4 +1,4 @@
-﻿namespace SignarlRChat.Interface
+﻿namespace SignalRChat.Interface
 {
     public interface IChatHub
     {

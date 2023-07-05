@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
-namespace SignarlRChat.Permission
+namespace SignalRChat.Permission
 {
     public class PermissionPolicyProvider : IAuthorizationPolicyProvider
     {

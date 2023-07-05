@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace SignarlRChat.Permission
+namespace SignalRChat.Permission
 {
     public record PermissionRequirement(string Permission) : IAuthorizationRequirement;
 }

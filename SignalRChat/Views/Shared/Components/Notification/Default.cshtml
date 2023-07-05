@@ -1,0 +1,29 @@
+﻿@model IEnumerable<TransectionHistory>
+@{
+    var UnreadMessageCount = ViewBag.UnreadMessageCount;
+}
+@if (Model.Any())
+{
+    foreach (var notify in Model)
+    {
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+
+        <li class="notification-item" href="javascript:void(0)" onclick="loadConversionsByGroupId('@notify.FromGroupId')">
+            <i class="bi bi-exclamation-circle text-warning"></i>
+            <div>
+                <h4>@notify.Title</h4>
+                <p>@notify.Text</p>
+                <p>@notify.WhenAgo</p>
+            </div>
+        </li>
+    }
+}
+
+<script>
+    window.addEventListener("load", () => {
+        document.querySelector('#notificationCount').textContent = '@UnreadMessageCount';
+        document.querySelector('#notifyCountInAllSection').textContent = '@UnreadMessageCount';
+    })
+</script>

@@ -1,0 +1,28 @@
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration _config;
+@{
+    var baseUrl = _config["UseUrls"];
+}
+<div class="modal" id="modalFileShow">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            @*<div class="modal-header" style="padding: 8px 16px !important">
+                <h3 class="modal-title"></h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>*@
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <embed src="" style="width: 110%; height: 100vh" id="embedEl" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showFileInModal(srcValue) {
+        //$('.modal-title').text(docTitle);
+        document.querySelector('#embedEl').src = `@baseUrl${srcValue}`;
+        $(modalFileShow).modal('show');
+    }
+</script>

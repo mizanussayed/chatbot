@@ -1,9 +1,8 @@
-﻿namespace SignarlRChat.Areas.Admin.Models
+﻿namespace SignalRChat.Areas.Admin.Models;
+
+public class UserRolesViewModel
 {
-    public class UserRolesViewModel
-    {
-        public string RoleId { get; set; } = string.Empty;
-        public string RoleName { get; set; } = string.Empty;
-        public bool IsSelected { get; set; }
-    }
+    public string RoleId { get; set; } = string.Empty;
+    public string RoleName { get; set; } = string.Empty;
+    public bool IsSelected { get; set; }
 }

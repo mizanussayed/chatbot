@@ -1,6 +1,6 @@
-﻿using SignarlRChat.DTOs;
+﻿using SignalRChat.DTOs;
 
-namespace SignarlRChat.Interface
+namespace SignalRChat.Interface
 {
     public interface IMailService
     {

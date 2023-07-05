@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityRole>
+@{
+    var name = ViewBag.Name;
+    var id = ViewBag.Id;
+    var roleId = ViewBag.RoleId;
+    var labelName = ViewBag.LabelName;
+    var labelClass = ViewBag.LabelClass;
+    var classList = ViewBag.ClassList;
+    var functionName = ViewBag.FunctionName;
+    var required = ViewBag.Required;
+}
+
+@if (!string.IsNullOrEmpty(labelName))
+{
+    <label class="form-label @labelClass">@labelName</label>
+}
+
+@if (required == "true")
+{
+    <select name="@name" id="@id" class="form-control @classList" onchange="@functionName" data-val="@required" data-val-required="@labelName is required">
+        <option value="">Choose Role</option>
+        @foreach (var item in Model)
+        {
+            if (item.Id == roleId)
+            {
+                <option selected value="@item.Id">@item.Name</option>
+            }
+            else
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        }
+    </select>
+}
+else
+{
+    <select name="@name" id="@id" class="form-control @classList" onchange="@functionName" data-val="@required" data-val-required="@labelName is required">
+        <option value="0">Choose Role</option>
+        @foreach (var item in Model)
+        {
+            if (item.Id == roleId)
+            {
+                <option selected value="@item.Id">@item.Name</option>
+            }
+            else
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        }
+    </select>
+}
+<span asp-validation-for="@name" class="text-danger"></span>
+
+

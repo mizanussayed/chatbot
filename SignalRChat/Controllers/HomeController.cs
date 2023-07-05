@@ -1,9 +1,9 @@
-﻿using SignarlRChat.Interface;
-using SignarlRChat.Models;
+﻿using SignalRChat.Interface;
+using SignalRChat.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace SignarlRChat.Controllers
+namespace SignalRChat.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SignarlRChat.Enum
+namespace SignalRChat.Enum;
+
+public enum TransectionStatus
 {
-    public enum TransectionStatus
-    {
-        [Display(Name = "Group Updated")]
-        GroupUpdated = 1,
-        [Display(Name = "Group Deleted")]
-        GroupDeleted = 2,
-        [Display(Name = "Member Added In Group")]
-        MemberAddedInGroup = 3,
-        [Display(Name = "Member Remove From Group")]
-        MemberRemoveFromGroup = 4
-    }
+    [Display(Name = "Group Updated")]
+    GroupUpdated = 1,
+    [Display(Name = "Group Deleted")]
+    GroupDeleted = 2,
+    [Display(Name = "Member Added In Group")]
+    MemberAddedInGroup = 3,
+    [Display(Name = "Member Remove From Group")]
+    MemberRemoveFromGroup = 4
 }

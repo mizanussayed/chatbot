@@ -1,0 +1,61 @@
+﻿@using SignalRChat.Entity;
+@model IEnumerable<ApplicationUser>
+@{
+    var name = ViewBag.Name;
+    var id = ViewBag.Id;
+    var userId = ViewBag.UserId;
+    var labelName = ViewBag.LabelName;
+    var labelClass = ViewBag.LabelClass;
+    var classList = ViewBag.ClassList;
+    var functionName = ViewBag.FunctionName;
+    var required = ViewBag.Required;
+}
+<style>
+    .photoOption{
+        padding: 2px;
+        margin-right: 5px;
+    }
+</style>
+
+@if (!string.IsNullOrEmpty(labelName))
+{
+    <label class="form-label @labelClass">@labelName</label>
+}
+
+@if (required == "true")
+{
+    <select name="@name" id="@id" class="form-control @classList" onchange="@functionName" data-val="@required" data-val-required="@labelName is required" >
+        <option value="">Choose User</option>
+        @foreach (var item in Model)
+        {
+            if (item.Id == userId)
+            {
+                <option selected value="@item.Id"><img src="@item.ProfilePhotoUrl" width="30" class="photoOption" /> @item.UserName</option>
+            }
+            else
+            {
+                <option value="@item.Id"><img src="@item.ProfilePhotoUrl" width="30" class="photoOption" />  @item.UserName</option>
+            }
+        }
+    </select>
+}
+else
+{
+    <select name="@name" id="@id" class="form-control @classList" onchange="@functionName" data-val="@required" data-val-required="@labelName is required">
+        <option value="0">Choose User</option>
+        @foreach (var item in Model)
+        {
+            if (item.Id == userId)
+            {
+                <option selected value="@item.Id"><img src="/images/users/rayhan8_20230507.jpg" width="30" class="photoOption" asp-append-version="true" />  @item.UserName</option>
+            }
+            else
+            {
+                <option value="@item.Id"><img src="/images/users/rayhan8_20230507.jpg" width="30" class="photoOption" asp-append-version="true" />  @item.UserName</option>
+            }
+        }
+    </select>
+}
+<span asp-validation-for="@name" class="text-danger"></span>
+
+

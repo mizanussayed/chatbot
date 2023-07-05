@@ -1,9 +1,9 @@
-﻿using SignarlRChat.Areas.Chat.Models;
+﻿using SignalRChat.Areas.Chat.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SignarlRChat.Entity
+namespace SignalRChat.Entity
 {
     public class ChatGroup
     {

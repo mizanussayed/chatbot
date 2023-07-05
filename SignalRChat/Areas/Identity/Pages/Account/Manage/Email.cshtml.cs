@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using SignarlRChat.DTOs;
-using SignarlRChat.Interface;
+using SignalRChat.DTOs;
+using SignalRChat.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace SignarlRChat.Areas.Identity.Pages.Account.Manage
+namespace SignalRChat.Areas.Identity.Pages.Account.Manage
 {
     public class EmailModel : PageModel
     {

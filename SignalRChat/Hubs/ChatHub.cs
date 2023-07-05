@@ -1,9 +1,9 @@
-﻿using SignarlRChat.Data;
+﻿using SignalRChat.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
-namespace SignarlRChat.Hubs
+namespace SignalRChat.Hubs
 {
     [Authorize]
     public class ChatHub : Hub

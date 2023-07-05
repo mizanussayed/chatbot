@@ -1,11 +1,11 @@
-﻿using SignarlRChat.Entity;
-using SignarlRChat.Hubs;
+﻿using SignalRChat.Entity;
+using SignalRChat.Hubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
-namespace SignarlRChat.Data
+namespace SignalRChat.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

@@ -1,0 +1,12 @@
+# Ignore .NET Core build artifacts
+bin/
+obj/
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Ignore Docker files
+Dockerfile*
+.dockerignore*

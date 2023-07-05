@@ -1,15 +1,7 @@
-﻿@using SignarlRChat.Areas.Admin.Models;
+﻿@using SignalRChat.Areas.Admin.Models;
 @model RegisterViewModel;
 
 <style>
-    @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins',sans-serif;
-    }
 
     /*  .container {
                     max-width: 700px;
@@ -19,23 +11,6 @@
                     border-radius: 5px;
                     box-shadow: 0 5px 10px rgba(0,0,0,0.15);
                 }*/
-
-    .title {
-        font-size: 25px;
-        font-weight: 500;
-        position: relative;
-    }
-
-        .title::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            height: 3px;
-            width: 30px;
-            border-radius: 5px;
-            background: linear-gradient(135deg, #71b7e6, #9b59b6);
-        }
 
     .contentRegister form .user-details {
         display: flex;
@@ -192,7 +167,7 @@
             </div>
             <div class="input-box">
                 <span class="details">Phone Number</span>
-                <input type="text" asp-for="PhoneNumber" placeholder="Enter your number" required>
+                <input type="text" asp-for="PhoneNumber" placeholder="Enter your number">
                 <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
             </div>
             <div class="gender-details" style="width: 45%;">

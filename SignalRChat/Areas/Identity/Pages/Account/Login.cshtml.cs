@@ -3,16 +3,16 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
-using SignarlRChat.Constant;
-using SignarlRChat.Interface;
-using SignarlRChat.Service;
+using SignalRChat.Constant;
+using SignalRChat.Interface;
+using SignalRChat.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SignarlRChat.Areas.Identity.Pages.Account
+namespace SignalRChat.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel

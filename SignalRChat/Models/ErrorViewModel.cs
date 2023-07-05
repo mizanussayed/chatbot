@@ -1,4 +1,4 @@
-namespace SignarlRChat.Models
+namespace SignalRChat.Models
 {
     public class ErrorViewModel
     {

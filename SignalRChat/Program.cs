@@ -1,20 +1,19 @@
-global using SignarlRChat.Entity;
-using SignarlRChat.Data;
-using SignarlRChat.DTOs;
-using SignarlRChat.Hubs;
-using SignarlRChat.Interface;
-using SignarlRChat.Permission;
-using SignarlRChat.Service;
+global using SignalRChat.Entity;
+using SignalRChat.Data;
+using SignalRChat.DTOs;
+using SignalRChat.Hubs;
+using SignalRChat.Interface;
+using SignalRChat.Permission;
+using SignalRChat.Service;
 using FastReport.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
-string defaultConnection = configuration.GetConnectionString("DefaultConnection");
+
 //builder.WebHost.UserUrls("http://192.168.20.214:4040");
 // Add services to the container.
 var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -91,10 +90,10 @@ using (var scope = app.Services.CreateScope())
     // Here using UserManager<ApplicaitonUser> as service
     var userManager = seedingSevice.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = seedingSevice.GetRequiredService<RoleManager<IdentityRole>>();
-    await SignarlRChat.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
-    await SignarlRChat.Seeds.DefaultUsers.SeedSuperAdminAsync(userManager, roleManager);
+    await SignalRChat.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
+    await SignalRChat.Seeds.DefaultUsers.SeedSuperAdminAsync(userManager, roleManager);
 }
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -102,7 +101,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 FastReport.Utils.RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace SignarlRChat.Extensions
+namespace SignalRChat.Extensions
 {
     public static class ApplicationUserExtension
     {

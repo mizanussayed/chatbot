@@ -1,0 +1,17 @@
+# Ignore .NET Core build artifacts
+SignalRChat/bin/
+SignalRChat/obj/
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Ignore Docker files
+Dockerfile*
+.dockerignore*
+
+
+.git/
+.gitignore*
+README.MD

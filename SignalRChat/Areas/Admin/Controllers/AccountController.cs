@@ -1,17 +1,17 @@
-﻿using SignarlRChat.Areas.Admin.Models;
+﻿using SignalRChat.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Encodings.Web;
 using System.Text;
-using SignarlRChat.Interface;
-using SignarlRChat.DTOs;
-using SignarlRChat.Extensions;
+using SignalRChat.Interface;
+using SignalRChat.DTOs;
+using SignalRChat.Extensions;
+using SignalRChat.Constant;
 
-namespace SignarlRChat.Areas.Admin.Controllers
-{
+namespace SignalRChat.Areas.Admin.Controllers;
+
     [Area("Admin")]
     public class AccountController : Controller
     {
@@ -54,12 +54,12 @@ namespace SignarlRChat.Areas.Admin.Controllers
                     user.LastName = model.LastName.Trim();
                     user.UserName = model.UserName.Trim();
                     user.Email = model.Email.Trim();
-                    user.PhoneNumber = model.PhoneNumber.Trim();
+                    user.PhoneNumber = model.PhoneNumber?.Trim();
                     await _userManager.AddPasswordAsync(user, model.Password);
                     var result = await _userManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        result = await _userManager.AddToRoleAsync(user, "ChatUser");
+                        result = await _userManager.AddToRoleAsync(user, Roles.ChatUser.ToString());
                         _logger.LogInformation("User created a new account with password.");
                         if (result.Succeeded)
                         {
@@ -152,4 +152,3 @@ namespace SignarlRChat.Areas.Admin.Controllers
             return new JsonResult(new { IsSuccess = false, Message = "Please write valid Email Address" });
         }
     }
-}

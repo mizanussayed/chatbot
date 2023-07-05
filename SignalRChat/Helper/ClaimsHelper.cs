@@ -1,10 +1,10 @@
-﻿using SignarlRChat.Areas.Admin.Models;
-using SignarlRChat.Permission;
+﻿using SignalRChat.Areas.Admin.Models;
+using SignalRChat.Permission;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 using System.Security.Claims;
 
-namespace SignarlRChat.Helper
+namespace SignalRChat.Helper
 {
     public static class ClaimsHelper
     {

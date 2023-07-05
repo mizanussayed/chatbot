@@ -1,4 +1,4 @@
-﻿namespace SignarlRChat.Constant
+﻿namespace SignalRChat.Constant
 {
     public static class Permissions
     {

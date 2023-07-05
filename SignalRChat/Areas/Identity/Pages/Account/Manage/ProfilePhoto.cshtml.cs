@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SignarlRChat.Areas.Identity.Pages.Account.Manage
+namespace SignalRChat.Areas.Identity.Pages.Account.Manage
 {
     public class ProfilePhotoModel : PageModel
     {

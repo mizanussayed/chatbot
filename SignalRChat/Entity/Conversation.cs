@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SignarlRChat.Entity
+namespace SignalRChat.Entity
 {
     public class Conversation
     {

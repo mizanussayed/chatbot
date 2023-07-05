@@ -17,10 +17,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using SignarlRChat.Entity;
-using SignarlRChat.Service;
+using SignalRChat.Entity;
+using SignalRChat.Service;
 
-namespace SignarlRChat.Areas.Identity.Pages.Account
+namespace SignalRChat.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
