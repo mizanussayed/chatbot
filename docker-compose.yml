@@ -1,0 +1,40 @@
+version: '3.4'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80"
+    depends_on:
+     - db
+    networks:
+      - appnet
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Mizanbro48&123"
+      MSSQL_PID: Express
+    volumes:
+      - dbdata:/var/opt/mssql
+    networks:
+      - appnet
+  nginx:
+    build:
+      context: .
+      dockerfile: Nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    networks:
+      - appnet
+networks:
+  appnet:
+    driver: bridge
+volumes:
+  dbdata:
+
