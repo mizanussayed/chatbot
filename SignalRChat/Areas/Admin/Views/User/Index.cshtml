@@ -1,0 +1,36 @@
+﻿@using SignarlRChat.Views.Shared.Components.RoleList;
+@{
+    ViewData["Title"] = "User List";
+}
+<style>
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <label class="form-label"><b>Role :</b></label>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+                    @(await Component.InvokeAsync<RoleListViewComponent>(new { name = "RoleId", id = "RoleId", roleId = "", labelName = "", isRequired = "true" }))
+                </div>
+            </div>
+            <div class="col-md-3 button">
+                <button class="btn btn-primary" id="loadBtn" onclick="loadUser()">Load User</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ViewAll">
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $('#RoleId').select2();
+        });
+        let loadUser = () => {
+            let roleId = $("#RoleId").val();
+            $("#ViewAll").load(`/Admin/User/LoadUser?roleId=${roleId}`);
+        }
+    </script>
+}

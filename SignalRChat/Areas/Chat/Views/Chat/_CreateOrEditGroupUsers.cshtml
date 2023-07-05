@@ -1,0 +1,242 @@
+﻿@using SignarlRChat.Areas.Chat.Models;
+@using SignarlRChat.Views.Shared.Components.Users;
+@model GroupUsersViewModel
+<link href="~/css/form-button.css" rel="stylesheet" asp-append-version="true" />
+<style>
+    .select2-container {
+        z-index: 100000;
+    }
+
+    .addItem, .rmvItem {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .addItem {
+        color: green;
+    }
+
+    .rmvItem {
+        color: red;
+    }
+
+    .disabledAuthorDropdown {
+        pointer-events: none !important;
+    }
+</style>
+<div>
+    <form id="createUserGroupForm" asp-area="Chat" asp-controller="Chat" asp-action="OnPostCreateOrEditUsersInGroup" onsubmit="return saveUserGroup(this)">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="userGroupTable" class="table table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Members:</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblBody">
+                        @for (int i = 0; i < Model.UserGroups.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.UserGroups[i].Id" id="Id__@i" />
+                                    <input type="hidden" asp-for="@Model.UserGroups[i].GroupId" id="GroupId__@i" />
+                                    <input type="hidden" asp-for="@Model.UserGroups[i].CreatedDate" id="CreatedDate__@i" />
+                                    <input type="hidden" asp-for="@Model.UserGroups[i].CreatedBy" id="CreatedBy__@i" />
+                                    <input type="hidden" asp-for="@Model.GroupName" />
+                                    <div class="input-group" id="inputGroup__@i">
+                                        @if (Model.AuthorId == @Model.UserGroups[i].UserId)
+                                        {
+                                            @(await Component.InvokeAsync<UsersViewComponent>(new { name = $"UserGroups[{i}].UserId", id = $"UserId__{i}", userId = Model.UserGroups[i].UserId, classList = $"userId-multiple itemClass", functionName = "checkDupplicateValue(this)", labelName = "", isRequired = "true" }))
+                                                <i class='fas fa-user-shield mt-2' style="margin-left: 4px"></i>
+                                        }
+                                        else
+                                        {
+                                            @(await Component.InvokeAsync<UsersViewComponent>(new { name = $"UserGroups[{i}].UserId", id = $"UserId__{i}", userId = Model.UserGroups[i].UserId, classList = "userId-multiple itemClass", functionName = "checkDupplicateValue(this)", labelName = "", isRequired = "true" }))
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <button id="btnAdd__@i" class="addItem success" type="button" onclick="addItem(this)" style="margin-right: 5px;"><i class="fa fa-plus success" aria-hidden="true"></i></button>
+                                        @if (Model.AuthorId != @Model.UserGroups[i].UserId)
+                                        {
+                                            <button id="btnRemove__@i" data-index="item__@i" class="rmvItem danger" type="button" onclick="deleteItem(this)"><i class="fa fa-minus danger" aria-hidden="true"></i></button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="mb-3 button">
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let groupId = @Model.UserGroups.FirstOrDefault().GroupId;
+        $('#formModal #modalHeaderTitle').html(`<img src="@(@Model.GroupPhotoUrl ?? "/images/no-image.png")" alt="Photo" class="groupPhoto" asp-append-version="true"> @Model.GroupName`);
+        $('#formModal #modalHeaderTitle').removeClass('title');
+
+        $('.userId-multiple').select2({
+            placeholder: 'Choose Memeber',
+            dropdownParent: $("#formModal"),
+            width: "100%"
+        });
+        $(`#UserId__0`).select2({
+            placeholder: 'Choose Memeber',
+            dropdownParent: $("#formModal"),
+            width: "93%"
+        });
+
+        $(`#inputGroup__0`).css("pointer-events", "none");
+    });
+
+    // Save users in group
+    saveUserGroup = form => {
+        //let selectedUser = $('.userId-multiple').select2('val').toString();
+        try {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.isValid) {
+                        $('#formModal').modal('hide');
+                        toastr.success(`${res.msg}`, 'success');
+                    }
+                    else {
+                        toastr.error(`${res.msg}`, 'error');
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            })
+            return false;
+        } catch (ex) {
+            console.log(ex)
+        }
+    }
+
+    // Add new user
+    function addItem(btn) {
+        let table = document.getElementById('userGroupTable');
+        let rows = table.getElementsByTagName('tr');
+        let lastRowIndex = rows.length - 2;
+        let nextRowIndex = parseInt(lastRowIndex) + 1;
+        let groupIdValue = $(`#GroupId__${lastRowIndex}`).val();
+        var newRow = table.insertRow();
+        newRow.innerHTML = newRowString(nextRowIndex, groupIdValue);
+        setUsersInDropdown(`UserId__${nextRowIndex}`);
+    }
+
+    // Delete user
+    function deleteItem(btn) {
+        debugger;
+        const table = document.getElementById('userGroupTable');
+        const rows = table.getElementsByTagName('tr');
+        if (rows.length == 2) {
+            toastNotifyError('This Row Cannot be Deleted');
+            return;
+        }
+        let currentIndex = $(btn).attr("data-index").split("__")[1];
+        let idValue = $(`#Id__${currentIndex}`).val();
+        if (idValue == 0) {
+            $(`#Id__${currentIndex}`).val(0);
+            $(`#GroupId__${currentIndex}`).val(0);
+            $(`#UserId__${currentIndex}`).val('');
+            $(btn).closest('tr').hide();
+        }
+        else {
+            let isConfirmed = confirm("Do you want to delete this?");
+            if (isConfirmed) {
+                try {
+                    let groupName = $('#GroupName').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: `/Chat/Chat/OnPostDeleteUserFromGroup?Id=${idValue}&groupName=${groupName}`,
+                        data: { id: idValue, groupName: groupName },
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            if (res.isValid) {
+                                $(`#Id__${currentIndex}`).val(0);
+                                $(`#GroupId__${currentIndex}`).val(0);
+                                $(`#UserId__${currentIndex}`).val('');
+                                $(btn).closest("tr").hide();
+                                toastr.success(`${res.msg}`, 'success');
+                            }
+                            else {
+                                toastr.error(`${res.msg}`, 'error');
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err)
+                        }
+                    })
+                } catch (ex) {
+                    console.log(ex)
+                }
+            }
+            else {
+                return;
+            }
+        }
+
+    };
+
+    // Set User dropdown option while adding new user
+    function setUsersInDropdown(selectId) {
+        $.get(`/Chat/Chat/GetIdentityUsers`, (res) => {
+            $(`#${selectId}`).html(`<option></option>`);
+            $(res).each((index, row) => {
+                $(`#${selectId}`).append(`<option value="${row.id}">${row.userName}</option>`);
+            });
+            setSelect2ToDropdown(`${selectId}`);
+        });
+    }
+
+    // Make the user dropdown to select2 dropdown
+    function setSelect2ToDropdown(selectId) {
+        $(`#${selectId}`).select2({
+            placeholder: 'Choose Memeber',
+            dropdownParent: $("#formModal"),
+            width: '100%'
+        });
+    }
+
+
+    // return new row string
+    function newRowString(i, groupId) {
+        return `   <tr>
+                          <td>
+                              <input type="hidden" name="UserGroups[${i}].Id" id="Id__${i}" value="0" />
+                              <input type="hidden" name="UserGroups[${i}].GroupId" id="GroupId__${i}" value="${groupId}" />
+                              <input type="hidden" name="UserGroups[${i}].CreatedDate" id="CreatedDate__${i}" />
+                              <input type="hidden" name="UserGroups[${i}].CreatedBy" id="CreatedBy__${i}" />
+                              <div class="input-group">
+                                          <select class="form-control itemClass" name="UserGroups[${i}].UserId", id="UserId__${i}" onchange="checkDupplicateValue(this)">
+                                  </select>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-group">
+                                  <button id="btnAdd__${i}" class="addItem" type="button" onclick="addItem(this)" style="margin-right: 5px; color: green;"><i class="fa fa-plus " aria-hidden="true"></i></button>
+                                  <button id="btnRemove__${i}" data-index="item__${i}" class="rmvItem" type="button" onclick="deleteItem(this)" style="color: red;"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                              </div>
+                          </td>
+                      </tr>
+                    `;
+    }
+</script>

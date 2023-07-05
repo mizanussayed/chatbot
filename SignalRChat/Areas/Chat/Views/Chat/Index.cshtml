@@ -1,0 +1,163 @@
+﻿@using SignarlRChat.Areas.Chat.Models;
+@using SignarlRChat.Views.Shared.Components.Notification;
+@model ChatUserGroupViewModel
+@{
+    var me = Model.ChatUsers.FirstOrDefault(p => p.Id == Model.LoginUserId);
+}
+<link href="~/css/recording.css" rel="stylesheet" />
+<link href="~/css/chatbox.css" rel="stylesheet" asp-append-version="true" />
+
+<div class="card ml-auto mt-4">
+    <div class="card-header card-header-custom">
+        <!-- Navbar -->
+
+        <partial name="_ChatBoxHeader" model="@me" />
+    </div>
+    <div class="card-body">
+        <div class="row" style=" margin: 0px">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3 bg-white border-right-2" id="user-group-wrapper">
+                <div id="UserListWrapper">
+                    <span class="user-group-title">Users:</span>
+                    <div class="people-list" id="UserListContainer">
+                        <ul class="list-unstyled chat-list mt-2 mb-0">
+
+                            <li class="clearfix userlistclass" id="user_@Model.LoginUserId">
+                                <a href="javascript:void(0)" class="text-dark" onclick="loadConversions(this, '@me.Id')">
+                                    <img src="@(me.ProfilePhotoUrl ?? "/images/no-image.png")" alt="avatar" asp-append-version="true">
+                                    <div class="about">
+                                        <div class="name">@me.FullName</div>
+                                        <div class="status">
+                                            <i class="fa fa-circle me"></i>
+                                            left 7 mins ago
+                                            <span class="badge bg-danger notifiyIconBadge" id="notify_@me.Id">@(me.UnreadMessageNo == 0 ? "" : me.UnreadMessageNo.ToString())</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            @foreach (var user in Model.ChatUsers.Where(p => p.Id != Model.LoginUserId))
+                            {
+                                <li class="clearfix userlistclass" id="user_@user.Id">
+                                    <a href="javascript:void(0)" class="text-dark" onclick="loadConversions(this, '@user.Id')">
+                                        <img src="@(user.ProfilePhotoUrl ?? "/images/no-image.png")" alt="avatar" asp-append-version="true">
+                                        <div class="about">
+                                            <div class="name">@user.FullName</div>
+                                            <div class="status">
+                                                <i class="fa fa-circle offline"></i>
+                                                left 7 mins ago
+                                                <span class="badge bg-danger notifiyIconBadge" id="notify_@user.Id">@(user.UnreadMessageNo == 0 ? "" : user.UnreadMessageNo.ToString())</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                @*Group Section*@
+                <div id="GroupListWrapper">
+                    <span class="user-group-title">
+                        Groups:  <a href="#"  id="createGroupBtn" onclick="getCreateOrUpdateGroupModal(0, 'Create Group')">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </span>
+                    <div id="GroupListContainer" class="people-list">
+                        <ul id="groupContainer" class="list-unstyled chat-list mt-2 mb-0">
+                            @foreach (var group in Model.ChatGroupsList)
+                            {
+                                @*<li id="user_@group.Id" class="grouplistclass">
+                            <a href="javascript:void(0)" onclick="loadConversionsByGroupId('@group.Id')">@group.Name</a>
+                            <button type="button" class="btn btn-outline-primary" style="padding: 0px 5px" onclick="getCreateOrUpdateUserGroupModal(@group.Id)">
+                            <i class="fa fa-users" aria-hidden="true" style="font-size: 12px"></i>
+                            </button>
+                            </li>*@
+
+                                <li class="clearfix grouplistclass" id="user_@group.Id" onclick="loadConversionsByGroupId('@group.Id')">
+                                    <a href="javascript:void(0)" class="text-dark">
+                                        <img src="@(group.GroupPhotoUrl ?? "/images/no-image.png")" alt="Photo" class="groupPhoto" asp-append-version="true">
+
+                                        <div class="about">
+                                            <div class="name">@group.Name</div>
+                                            @* <div class="status">
+                                        <span class="badge bg-danger ml-3" id="notify_@group.Id">@(group.UnreadMessageNo == 0 ? "" : group.UnreadMessageNo.ToString())</span>
+                                        </div>*@
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9 bg-warning" id="msgMainContainer">
+                <div id="loadConversions">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer d-none">
+        <div class="row mt-2 m-0">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9 mt-2" style="padding-right: 6px; padding-left: 6px">
+                <form method="post" asp-action="CreateConversation" asp-controller="Chat" asp-area="Chat" onsubmit="return sendMessage(this)" enctype="multipart/form-data">
+                    <input type="hidden" name="FromUserId" id="LoginUserId" value="@Model.LoginUserId" />
+                    <input type="hidden" name="FromUserName" id="FromUserName" value="@Model.LoginUserFullName" />
+                    <input type="hidden" name="ToUserId" id="ToUserId" value="" />
+                    <input type="hidden" name="ToUserName" id="ToUserName" value="" />
+                    <input type="hidden" name="GroupId" id="GroupId" value="0" />
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend" style="cursor: pointer" title="Upload Files">
+                            <label for="Files" style="padding-right: 8px; margin-top: 5px">
+                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                <input type="file" id="Files" name="Files" style="display: none" multiple="" data-original-title="upload photos">
+                            </label>
+                        </div>
+
+
+                        @*Recording*@
+                        <i class="start-recording-button fa fa-microphone" aria-hidden="true"></i>
+                        <div class="recording-contorl-buttons-container hide" style="width: 80%">
+                            <i class="cancel-recording-button fa-regular fa-circle-xmark" aria-hidden="true"></i>
+                            <div class="recording-elapsed-time">
+                                <i class="red-recording-dot fa fa-circle" aria-hidden="true"></i>
+                                <p class="elapsed-time"></p>
+                            </div>
+                            <i class="stop-recording-button fa-regular fa-circle-stop" aria-hidden="true"></i>
+                        </div>
+
+                        <textarea class="form-control" id="msgContent" name="TextMessage" style="max-height: 100px; resize: none;" rows="1" data-min-rows='3' placeholder="Type a message" autofocus></textarea>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-outline-secondary" id="sendBtn">
+                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <audio id="notification-sound" class="d-none" src="~/audio/mixkit-retro-confirmation-tone-2860.wav" muted="muted"></audio>
+
+
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $('#msgContent').on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    </script>
+}
+<script>
+    var loginUserId = '@Model.LoginUserId';
+</script>
+@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+<script src="~/js/signalr.js"></script>
+<script src="~/js/chat.js" asp-append-version="true"></script>
+<script src="~/js/chatrequesthandler.js" asp-append-version="true"></script>
+<script src="~/js/audio-recording.js" asp-append-version="true"></script>

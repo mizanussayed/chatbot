@@ -1,0 +1,35 @@
+﻿
+@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+<div class="row mt-3">
+    <div class="col-md-8">
+        <h1 class="d-inline" style="background-image: linear-gradient(135deg, #4A00E0, #2ebf91 ); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Manage your account</h1>
+    </div>
+    <div class="col-md-4 mt-2">
+        <a asp-action="Index" asp-controller="Chat" asp-area="Chat" class="btn btn-sm btn-outline-info" style="float: right !important">Back to Chat</a>
+    </div>
+</div>
+<div>
+    @*<h2>Change your account settings</h2>*@
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

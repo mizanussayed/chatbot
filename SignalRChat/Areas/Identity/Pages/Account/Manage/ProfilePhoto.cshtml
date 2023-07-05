@@ -1,0 +1,90 @@
+﻿@page
+@model ProfilePhotoModel
+@{
+    ViewData["Title"] = "Profile Photo";
+    ViewData["ActivePage"] = ManageNavPages.ProfilePhoto;
+}
+
+<link href="~/css/form-button.css" rel="stylesheet" />
+<style>
+
+    #photoPreview {
+        margin-top: 20px;
+        width: 250px;
+    }
+
+    .img-border {
+        padding: 10px;
+        border-image: linear-gradient(135deg, #71b7e6, #9b59b6) 30;
+        border-width: 2px;
+        border-style: solid;
+        width: 200px;
+        height: 200px;
+    }
+
+    form .button input {
+        width: 200px;
+    }
+</style>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="title">Profile Photo</div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="user-details">
+                <div id="photoPreview">
+                    <label asp-for="Input.ProfilePhoto">
+                        <img src="@(Model.ProfilePhotoUrl ?? "/images/no-image.png")" id="imgTag" class="img-fluid img-border" asp-append-version="true" title="Profile Photo" />
+                        <input type="file" asp-for="Input.ProfilePhoto" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png" />
+                    </label>
+                </div>
+            </div>
+            <div class="button">
+                <input type="submit" value="Save Photo">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $('#Input_ProfilePhoto').change(() => {
+            let files = $('#Input_ProfilePhoto').get(0);
+            let imgSrc = URL.createObjectURL(files.files[0]);
+            $('#imgTag').attr('src', imgSrc);
+        });
+
+    </script>
+
+    <script>
+        document.getElementById('photoPreview').addEventListener('drop', handleDrop, false);
+
+        function handleDrop(event) {
+            event.preventDefault();
+
+            if (event.dataTransfer.files.length > 0) {
+                var file = event.dataTransfer.files[0];
+
+                // You can perform additional validation here (e.g., file type, size)
+
+                // Set the file object as the value of the file input field
+                document.getElementById('Input_ProfilePhoto').files = event.dataTransfer.files;
+                let imgSrc = URL.createObjectURL(event.dataTransfer.files[0]);
+                $('#imgTag').attr('src', imgSrc);
+                // Submit the form
+                // document.getElementById('uploadForm').submit();
+            }
+        }
+
+        document.getElementById('photoPreview').addEventListener('dragover', function (event) {
+            event.preventDefault();
+        }, false);
+    </script>
+
+
+}

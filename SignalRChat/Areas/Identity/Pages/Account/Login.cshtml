@@ -1,0 +1,290 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+
+<link href="~/css/login.css" rel="stylesheet" />
+<style>
+    .btn-primary {
+        background-color: #38d39f !important;
+        border-color: #38d39f !important;
+    }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #29bb8a !important;
+            border-color: #27b183 !important;
+        }
+
+    input[type=submit].btn-block {
+        width: 100%;
+    }
+
+    .social-login a i {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .mb-4, .my-4 {
+        margin-bottom: 1.5rem !important;
+    }
+
+
+    .social-login button {
+        text-decoration: none;
+        position: relative;
+        text-align: center;
+        color: #fff;
+        margin-bottom: 10px;
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50%;
+        display: inline-block;
+        border: none;
+        padding: 20px !important;
+
+    }
+
+        .social-login button i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .social-login button:hover {
+            color: #fff;
+        }
+
+        .social-login button.facebook {
+            background: #3b5998;
+        }
+
+            .social-login button.facebook:hover {
+                background: #344e86;
+            }
+
+        .social-login button.twitter {
+            background: #1da1f2; 
+        }
+
+            .social-login button.twitter:hover {
+                background: #0d95e8;
+            }
+
+        .social-login button.google {
+            background: #ea4335 !important;
+        }
+
+            .social-login button.google:hover {
+                background: #e82e1e !important;
+            }
+</style>
+
+
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-6">
+                <img src="/images/undraw_file_sync_ot38.svg" alt="Image" class="img-fluid">
+            </div>
+            <div class="col-md-7 col-lg-6 p-md-0 contents">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="mb-4">
+                            <h3>Sign In to <strong>Triangle ChatBot</strong></h3>
+                            <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <form id="account" method="post">
+                            <div class="form-group first">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" asp-for="Input.Email" autocomplete="username" aria-required="true" id="username">
+
+                            </div>
+                            <div class="form-group last mb-4">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" asp-for="Input.Password" id="password" autocomplete="current-password" aria-required="true">
+
+                            </div>
+
+                            <div class="d-flex mb-5 align-items-center">
+                                <label class="control control--checkbox mb-0" asp-for="Input.RememberMe">
+                                    <span class="caption">Remember me</span>
+                                    <input type="checkbox" checked="checked" asp-for="Input.RememberMe" />
+                                    <div class="control__indicator"></div>
+                                </label>
+                                <span class="ml-auto" style="margin-left: auto !important;"><a id="forgot-password" onclick="onGetForgotPasswordForm()" class="forgot-pass" style="cursor: pointer;">Forgot Password</a></span>
+                            </div>
+
+                            <input type="submit" value="Log In" class="btn text-white btn-block btn-primary">
+
+                            <div class="d-flex my-2 align-items-center">
+                                <label class="control control--checkbox mb-0" style="padding-left: 0px">
+                                    <span class="caption">or sign in with</span>
+                                </label>
+                                <span class="ml-auto" style="margin-left: auto !important;"><a id="registerLink" @*asp-page="./Register"*@ onclick="onGetRegisterForm()" class="forgot-pass" style="cursor: pointer;">Register Here</a></span>
+                            </div>
+                        </form>
+
+                        @*  Extenal Login provider   *@
+
+                      @*  <div class="social-login">
+                            <a href="#" class="facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="twitter">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                            <a href="#" class="google">
+                                <i class="fa-brands fa-google"></i>
+                            </a>
+                        </div>*@
+
+                        @{
+                            if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                            {
+                                <div class="social-login">
+                                    There is nothing external login provider
+                                </div>
+                            }
+                            else
+                            {
+                                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                    <div class="social-login">
+                                        @foreach (var provider in Model.ExternalLogins!)
+                                        {
+                                            if (provider.Name == "Google")
+                                            {
+                                                <button type="submit" class="btn google" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fa-brands fa-google"></i></button>
+                                            }
+                                            else if (provider.Name == "Facebook")
+                                            {
+                                                <button type="submit" class="btn facebook" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fa-brands fa-facebook-f"></i></button>
+                                            }
+                                            else if (provider.Name == "Twitter")
+                                            {
+                                                <button type="submit" class="btn twitter" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fa-brands fa-twitter"></i></button>
+                                            }
+                                        }
+                                    </div>
+                                </form>
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@*Modal for create a user group*@
+<div class="modal fade" id="registerForm" tabindex="-1" aria-labelledby="modalHeaderTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $('.form-control').on('input', function () {
+            var $field = $(this).closest('.form-group');
+            if (this.value) {
+                $field.addClass('field--not-empty');
+            } else {
+                $field.removeClass('field--not-empty');
+            }
+        });
+
+        function onGetRegisterForm() {
+            $.get(`/Admin/Account/OnGetUserRegister`, (result) => {
+                $('#registerForm .modal-body').html(result);
+                $('#registerForm').modal('show');
+            });
+        }
+
+        let onPostUserRegister = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            toastr.success(`User registration successful`, `success`);
+                            $('#registerForm').modal('hide');
+                            $('#Input_Email').val(result.username);
+                            $('#Input_Password').val(result.password);
+
+                        }
+                        else {
+                            toastr.error(`User registration failed`, `warning`);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+        function onGetForgotPasswordForm() {
+            $.get(`/Admin/Account/OnGetForgotPassword`, (result) => {
+                $('#registerForm .modal-body').html(result);
+                $('#registerForm').modal('show');
+            });
+        }
+
+        let onPostForgotPassword = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            $('#registerForm').modal('hide');
+                            toastr.success(`${result.message}`, `success`);
+                        }
+                        else {
+                            toastr.error(`${result.message}`, `warning`);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+
+    </script>
+}

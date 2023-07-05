@@ -1,0 +1,128 @@
+﻿@using SignarlRChat.Models;
+@model ChatGroup
+<link href="~/css/form-button.css" rel="stylesheet" />
+<form id="createform" asp-area="Chat" asp-controller="Chat" asp-action="CreateOrEditGroup" onsubmit="return saveGroup(this)">
+    <div class="mb-3 input-box">
+        <input type="hidden" class="form-control" asp-for="Id"  />
+        <input type="hidden" class="form-control" asp-for="CreatedDate"  />
+        <input type="hidden" class="form-control" asp-for="AuthorId"  />
+        <span class="details">Name:</span>
+        <input type="text" class="form-control" asp-for="Name" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3 input-box">
+        <span class="details">Description:</span>
+        <textarea class="form-control" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @if (Model is not null && Model.Id > 0)
+                {
+                    <input type="hidden" asp-for="GroupPhotoUrl" class="form-control" />
+                }
+                <label class="form-label requiredLabel">Upload Profile Photo (2MB) :</label>
+                <div class="custom-file">
+                    <input type="file" class="form-control" asp-for="GroupPhoto" accept="image/*" />
+                    <span asp-validation-for="GroupPhoto" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="photoPreview" style="padding-top: 10px; padding-right: 10px">
+                @if (Model is not null && !string.IsNullOrEmpty(Model.GroupPhotoUrl))
+                {
+                    <img src="@Model.GroupPhotoUrl" class="img-fluid img-thumbnail" width="200" height="200" title="" asp-append-version="true" />
+                }
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 button">
+        <button type="submit" class="btn btn-primary" id="saveBtn">Save Group</button>
+    </div>
+</form>
+
+<script>
+    saveGroup = form => {
+        try {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.isValid) {
+                        let innerAnchorTag = $(`#user_${result.id}`).find('a');
+                        if (innerAnchorTag.length > 0) {
+                            //$(innerAnchorTag).text(result.name);
+                            $(innerAnchorTag).find('img').attr('src', result.groupPhotoUrl);
+                            $(innerAnchorTag).find("div[class*='name']").text(result.name);
+
+                            // after edit group modify group header image and name
+                            if (document.getElementById('loadConversions').contains(document.getElementById('messageList'))) {
+                                let toUserIdFromHeader = $('#toUserIdFromHeader').text();
+                                let toGroupIdFromHeader = $('#toGroupIdFromHeader').text();
+
+                                if (result.id > 0 && result.id == toGroupIdFromHeader) {
+                                    document.querySelector('#chatbox-header-image').src = result.groupPhotoUrl;
+                                    document.querySelector('#conGroupTitle').textContent = result.name;
+                                }
+                            }
+                        }
+                        else{
+                            let photoUrl = !result.groupPhotoUrl ? "/images/no-image.png" : result.groupPhotoUrl;
+                            $(`#groupContainer`).append(`<li class="clearfix grouplistclass" id="user_'${result.id}'">
+                                            <a href="javascript:void(0)" class="text-dark" onclick="loadConversionsByGroupId('${result.id}')">
+                                                        <img src="${photoUrl}" alt="Group Photo Url" class="groupPhoto">
+                                                <div class="about">
+                                                    <div class="name">${result.name}</div>
+                                                </div>
+                                            </a>
+                                        </li>`
+                            );
+                        }
+                        $('#formModal').modal('hide');
+                        toastr.success(`${result.msg}`, 'success');
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                    toastr.error(`${err}`, 'error');
+                }
+            })
+            return false;
+        } catch (ex) {
+            console.log(ex)
+        }
+    }
+
+    $("#GroupPhoto").change(function () {
+        $("#photoPreview").html("");
+        if (typeof (FileReader) != "undefined") {
+            $("#photoPreview").show();
+            var reader = new FileReader();
+            if (($(this)[0].files[0].size / 1000) <= 2000) {
+                reader.onload = function (e) {
+                    var image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function () {
+                        $("#photoPreview").append("<img class='img-thumbnail' />");
+                        $("#photoPreview img").attr("src", e.target.result);
+                        $("#photoPreview img").attr("title", 'Profile Photo');
+                        $("#photoPreview img").attr("style", "height:150px;width: 150px; float: right");
+                    };
+                }
+            }
+            else {
+                $('#photoPreview').append(`<span class="text-danger">file size not more than 2MB</span>`);
+                $("#GroupPhoto").val('');
+            }
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            alert("This browser does not support FileReader.");
+        }
+    });
+
+</script>

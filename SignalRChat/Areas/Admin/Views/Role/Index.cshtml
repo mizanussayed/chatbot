@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Newtonsoft.Json;
+@model IEnumerable<IdentityRole>
+@{
+    ViewData["Title"] = "Role Management";
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Create Or Edit Role</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="CreateOrEdit" asp-controller="Role">
+            <div class="input-group">
+                <input type="hidden" name="RoleId" id="roleId" />
+                <label class="form-label" style="margin-right: 7px;">Role Name:</label>
+                <input type="text" name="RoleName" id="roleName" class="form-control" style="border-bottom-left-radius: 4px; border-top-left-radius: 4px" required />
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-primary"><i class="fas fa-undo"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card mt-3">
+    <div class="card-header">
+        <h3 class="card-title">Role List</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-responsive table-striped">
+            <tr class="alert-primary">
+                <th>Role Name</th>
+                <th>Action</th>
+            </tr>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>
+                        @role.Name
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="roleActionDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu" area-labelledby="roleActionDropdownBtn">
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="document.querySelector('#roleId').value='@role.Id'; document.querySelector('#roleName').value='@role.Name'">Edit Role</a>
+                                <form method="post" asp-action="Delete" asp-route-roleId="@role.Id" onclick="return confirm('Do you want delete Role(@role.Name)')">
+                                    <button class="dropdown-item">Delete Role</button>
+                                </form>
+                                <a class="dropdown-item" asp-action="OnGetRoleClaims" asp-route-roleId="@role.Id">Manage Permissions</a>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+

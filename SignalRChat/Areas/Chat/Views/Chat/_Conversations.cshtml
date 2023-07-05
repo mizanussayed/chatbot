@@ -1,0 +1,279 @@
+﻿@using SignarlRChat.Areas.Chat.Models;
+@using System.Security.Claims;
+@using System.Text.RegularExpressions;
+@inject UserManager<ApplicationUser> userMangager;
+@model ConversationViewModel
+@{
+}
+<link href="~/css/conversationbox.css" rel="stylesheet" asp-append-version="true" />
+
+<div id="toUserContainer" class="row col-md-12 bg-white border-bottom-2">
+    <div>
+        @if (!string.IsNullOrEmpty(Model.ToUserName))
+        {
+            @*<span style="margin-right: 5px"><i class="fas fa-user" style="font-size: 20px"></i> </span>*@
+            <img src="@(Model.ToUserProfilePhotoUrl ?? "/images/no-image.png")" alt="avatar" style="width: 35px; border-radius: 50%; margin-top: -11px" asp-append-version="true">
+            <h3 id="conUserTitle" class="d-inline toUserGroupTitle">@Model.ToUserName</h3>
+            <span id="toUserIdFromHeader" class="d-none">@Model.ToUserId</span>
+        }
+        else if (!string.IsNullOrEmpty(Model.GroupName))
+        {
+            @*<span style="margin-right: 5px"><i class="fas fa-users" style="font-size: 20px"></i> </span>*@
+            <img src="@(Model.GroupPhotoUrl ?? "/images/no-image.png")" alt="Photo" id="chatbox-header-image" style="width: 35px; border-radius: 50%; margin-top: -11px" asp-append-version="true">
+            <h3 id="conGroupTitle" class="d-inline toUserGroupTitle">@Model.GroupName</h3>
+            <button style="padding: 0;border: none;background: none; margin-left: 20px" title="Edit Group" onclick="getCreateOrUpdateGroupModal(@Model.GroupId, `Edit Group Name`)">
+                <i class="fa fa-pencil" aria-hidden="true" style="font-size:12px; color: #0d6efd"></i>
+            </button>
+            if (Model.GroupAuthorId.Equals(Model.LoginUserId))
+            {
+                <button style="padding: 0;border: none;background: none; margin-left: 10px" title="Delete Group" onclick="deleteGroup(@Model.GroupId)">
+                    <i class="fa fa-trash" aria-hidden="true" style="font-size:12px; color: #e47297"></i>
+                </button>
+            }
+            <button type="button" class="btn btn-outline-primary" style="padding: 0px 5px; margin-left: 10px; margin-top: -5px;" title="Assign Or Remove Users" onclick="getCreateOrUpdateUserGroupModal(@Model.GroupId)">
+                <i class="fa fa-users" aria-hidden="true" style="font-size: 12px"></i>
+            </button>
+            <span id="toGroupIdFromHeader" class="d-none">@Model.GroupId</span>
+        }
+    </div>
+</div>
+<div class="row" id="conversationContainer">
+
+    <div id="messageList">
+        @if (Model.Conversations.Any())
+        {
+            @foreach (var conversation in Model.Conversations)
+            {
+                if (conversation.FromUserId == Model.LoginUserId)
+                {
+                    if (!String.IsNullOrEmpty(conversation.TextMessage))
+                    {
+                        var txtFormatted  = Regex.Replace(conversation.TextMessage, "\r\n", "<br />");
+                        <div class="message-box my-message">
+                            <p>
+                                @Html.Raw(txtFormatted)
+                                @*<pre> @conversation.TextMessage.Replace("<br/>",Environment.NewLine)</pre>*@
+                                <br>
+                                <span>@conversation.SendDate.ToShortTimeString()</span>
+                            </p>
+                        </div>
+                    }
+                    if (conversation.ConversationFiles.Count > 0)
+                    {
+                        foreach (var file in conversation.ConversationFiles)
+                        {
+                            var fileType = file.FileType.Split('/')[0];
+                            var hasWebmExtension = file.FileType.Contains("webm");
+
+                            if (fileType == "image")
+                            {
+                                <div class="message-box my-message">
+                                    <p>
+                                        <img src="@file.FileUrl" alt="file" onclick="showImageToModal('@file.FileUrl')" class="img-fluid img-thumbnail ml-0 mr-0">
+                                        <br>
+                                        <span>@conversation.SendDate.ToShortTimeString()</span>
+                                    </p>
+                                </div>
+                            }
+                            else if (fileType == "audio")
+                            {
+                                if (hasWebmExtension)
+                                {
+                                    <div class="message-box my-message">
+                                        <p>
+                                            <audio controls>
+                                                <source src="@file.FileUrl">
+                                            </audio>
+                                            <br>
+                                            <span>@conversation.SendDate.ToShortTimeString()</span>
+                                        </p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="message-box my-message">
+                                        <p>
+                                            <span class="fileName">@file.FileName</span>
+                                            <audio controls>
+                                                <source src="@file.FileUrl">
+                                            </audio>
+                                            <br>
+                                            <span>@conversation.SendDate.ToShortTimeString()</span>
+                                        </p>
+                                    </div>
+                                }
+
+                            }
+                            else if (fileType == "video")
+                            {
+                                <div class="message-box my-message">
+                                    <p>
+                                        <span class="fileName">@file.FileName</span>
+                                        <video controls>
+                                            <source src="@file.FileUrl">
+                                        </video>
+                                        <br>
+                                        <span>@conversation.SendDate.ToShortTimeString()</span>
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="message-box my-message">
+                                    <p>
+                                        <span onclick="showFileInModal('@file.FileUrl')" class="fileName"><i class="fa-solid fa-file-lines"></i> @file.FileName</span>
+                                        <span class="fileSize">@file.FileSize</span>
+                                        <br>
+                                        <span>@conversation.SendDate.ToShortTimeString()</span>
+                                    </p>
+                                </div>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(conversation.TextMessage))
+                    {
+                        var txtFormatted = Regex.Replace(conversation.TextMessage, "\r\n", "<br />");
+
+                        <div class="message-box friend-message">
+                            <p>
+                                @if (conversation.GroupId > 0)
+                                {
+                                    <span class="fromUser">@conversation.FromUserName</span>
+                                }
+                                @Html.Raw(txtFormatted)
+
+                                <br>
+                                <span>@conversation.SendDate.ToShortTimeString()</span>
+                            </p>
+                        </div>
+                    }
+                    if (conversation.ConversationFiles.Count > 0)
+                    {
+                        foreach (var file in conversation.ConversationFiles)
+                        {
+                            var fileType = file.FileType.Split('/')[0];
+                            var hasWebmExtension = file.FileType.Contains("webm");
+                            if (fileType == "image")
+                            {
+                                <div class="message-box friend-message">
+                                    <p>
+                                        @if (conversation.GroupId > 0)
+                                        {
+                                            <span class="fromUser">@conversation.FromUserName</span>
+                                        }
+                                        <img src="@file.FileUrl" alt="file" onclick="showImageToModal('@file.FileUrl')" class="img-fluid img-thumbnail ml-0 mr-0">
+                                        <br>
+                                        <span>@conversation.SendDate.ToShortTimeString()</span>
+                                    </p>
+                                </div>
+                            }
+                            else if (fileType == "audio")
+                            {
+                                if (hasWebmExtension)
+                                {
+                                    <div class="message-box friend-message">
+                                        <p>
+                                            @if (conversation.GroupId > 0)
+                                            {
+                                                <span class="fromUser">@conversation.FromUserName</span>
+                                            }
+                                            <audio controls>
+                                                <source src="@file.FileUrl">
+                                            </audio>
+                                            <br>
+                                            <span>@conversation.SendDate.ToShortTimeString()</span>
+                                        </p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="message-box friend-message">
+                                        <p>
+                                            @if (conversation.GroupId > 0)
+                                            {
+                                                <span class="fromUser">@conversation.FromUserName</span>
+                                            }
+                                            <span>@file.FileName</span>
+                                            <audio controls>
+                                                <source src="@file.FileUrl">
+                                            </audio>
+                                            <br>
+                                            <span>@conversation.SendDate.ToShortTimeString()</span>
+                                        </p>
+                                    </div>
+                                }
+
+                            }
+                            else if (fileType == "video")
+                            {
+                                <div class="message-box friend-message">
+                                    <p>
+                                        @if (conversation.GroupId > 0)
+                                        {
+                                            <span class="fromUser">@conversation.FromUserName</span>
+                                        }
+                                        <span class="fileName">@file.FileName</span>
+                                        <video controls>
+                                            <source src="@file.FileUrl">
+                                        </video>
+                                        <br>
+                                        <span>@conversation.SendDate.ToShortTimeString()</span>
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="message-box friend-message">
+                                    <p>
+                                        @if (conversation.GroupId > 0)
+                                        {
+                                            <span class="fromUser">@conversation.FromUserName</span>
+                                        }
+                                        <span  class="fileName" onclick="showFileInModal('@file.FileUrl')"><i class="fa-solid fa-file-lines"></i> @file.FileName</span>
+                                        <span class="fileSize">@file.FileSize</span>
+                                        <span>@conversation.SendDate.ToShortTimeString()</span>
+                                    </p>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </div>
+</div>
+
+@*Modal for create a user group*@
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="imgBody" style="padding: 8px">
+                <img src="" atl="img" class="img-fluid img-thumbnail" id="modalImgTag" />
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for create a user group*@
+
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $('#ToUserName').val('@Model.ToUserName');
+            scrollToBottom();
+        });
+    </script>
+}
+<script>
+    $('#ToUserName').val('@Model.ToUserName');
+
+    function showImageToModal(url) {
+        $('#modalImgTag').attr('src', url);
+        $('#imageModal').modal('show');
+
+    }
+</script>
+
+

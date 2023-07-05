@@ -1,0 +1,95 @@
+﻿@using SignarlRChat.Areas.Chat.Models;
+@using SignarlRChat.Views.Shared.Components.Notification;
+@model ChatUserViewModel
+
+<link href="~/css/header.css" rel="stylesheet" asp-append-version="true" />
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a class="logo d-flex align-items-center" asp-area="Chat" asp-controller="Chat" asp-action="Index" style="background-image: linear-gradient(135deg, #4A00E0, #2ebf91 ); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            <img src="/images/logo.png" alt="logo" asp-append-version="true">
+            <span class="d-none d-lg-block">Triangle ChatBot</span>
+        </a>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center" >
+            <li class="nav-item dropdown">
+
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number" id="notificationCount">0</span>
+                </a><!-- End Notification Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="notify-wrapper" style="transform: translate(-40px, 51px) !important;">
+                    <li class="dropdown-header" id="allNotifySection">
+                        You have <span id="notifyCountInAllSection">0</span> new notifications
+                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    @(await Component.InvokeAsync<NotificationViewComponent>(new { loginUserId = Model.Id }))
+
+                    @*<li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <i class="bi bi-check-circle text-success"></i>
+                    <i class="bi bi-x-circle text-danger"></i>
+                    <i class="bi bi-info-circle text-primary"></i>
+
+                    <li class="notification-item">
+                    </li>*@
+
+                    @*<li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li class="dropdown-footer">
+                        <a href="#">Show all notifications</a>
+                    </li>*@
+
+                </ul><!-- End Notification Dropdown Items -->
+
+            </li><!-- End Notification Nav -->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" data-bs-toggle="dropdown" href="#">
+                    <img src="@(Model.ProfilePhotoUrl ?? "/images/no-image.png")" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">@Model.FullName</span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                   @* <li class="dropdown-header">
+                        <h6>@Model.FullName</h6>
+                        <span>Web Designer</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>*@
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" asp-area="Identity" asp-page="/Account/Manage/Index">
+                            <i class="bi bi-person"></i>
+                            <span>Profile & Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <form id="logoutform" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Chat", new { area = "Chat" })">
+                            <a href="javascript:$('#logoutform').submit();" class="dropdown-item d-flex align-items-center">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>&nbsp; Logout
+                            </a>
+                        </form>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->

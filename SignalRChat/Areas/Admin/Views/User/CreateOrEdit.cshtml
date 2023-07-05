@@ -1,0 +1,173 @@
+﻿@using SignarlRChat.Areas.Admin.Models;
+@model ApplicationUserViewModel
+@{
+    ViewData["Title"] = "Create Or Edit User";
+}
+<style>
+    .button{
+        height: 73px;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">User</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="OnPostCreateOrEdit" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">First Name:</label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Last Name:</label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Username:</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Email:</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @if (string.IsNullOrEmpty(Model.Id))
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number:</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @if (string.IsNullOrEmpty(Model.Id))
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Password:</label>
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @if (Model is not null && !string.IsNullOrEmpty(Model.Id))
+                            {
+                                <input type="hidden" asp-for="ProfilePhotoUrl" class="form-control" />
+                            }
+                            <label class="form-label requiredLabel">Upload Profile Photo (2MB) :</label>
+                            <div class="custom-file">
+                                <input type="file" class="form-control" asp-for="ProfilePhoto" accept="image/*" />
+                                <span asp-validation-for="ProfilePhoto" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="photoPreview" style="padding-top: 10px; padding-right: 10px">
+                            @if (Model is not null && !string.IsNullOrEmpty(Model.ProfilePhotoUrl))
+                            {
+                                <img src="@Model.ProfilePhotoUrl" class="img-fluid img-thumbnail" width="200" height="200" title="" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" asp-for="Password" class="form-control" />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number:</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        @if (Model is not null && !string.IsNullOrEmpty(Model.Id))
+                        {
+                            <input type="hidden" asp-for="ProfilePhotoUrl" class="form-control" />
+                        }
+                        <label class="form-label requiredLabel">Upload Profile Photo (2MB) :</label>
+                        <div class="custom-file">
+                            <input type="file" class="form-control" asp-for="ProfilePhoto" accept="image/*" />
+                            <span asp-validation-for="ProfilePhoto" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="photoPreview" style="padding-top: 10px; padding-right: 10px">
+                            @if (Model is not null && !string.IsNullOrEmpty(Model.ProfilePhotoUrl))
+                            {
+                                <img src="@Model.ProfilePhotoUrl" class="img-thumbnail" width="150" height="150" asp-append-version="true" title="Profile Photo" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row button p-3">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            let id = $('#Id').val();
+            if (id) {
+                $('#UserName').attr('readonly', 'true');
+            }
+        });
+
+        $("#ProfilePhoto").change(function () {
+            $("#photoPreview").html("");
+            if (typeof (FileReader) != "undefined") {
+                $("#photoPreview").show();
+                var reader = new FileReader();
+                if (($(this)[0].files[0].size / 1000) <= 2000) {
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        image.src = e.target.result;
+                        image.onload = function () {
+                            $("#photoPreview").append("<img class='img-thumbnail' />");
+                            $("#photoPreview img").attr("src", e.target.result);
+                            $("#photoPreview img").attr("title", 'Profile Photo');
+                            $("#photoPreview img").attr("style", "height:150px;width: 150px");
+                        };
+                    }
+                }
+                else {
+                    $('#photoPreview').append(`<span class="text-danger">file size not more than 2MB</span>`);
+                    $("#ProfilePhoto").val('');
+                }
+                reader.readAsDataURL($(this)[0].files[0]);
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+        });
+    </script>
+}
+

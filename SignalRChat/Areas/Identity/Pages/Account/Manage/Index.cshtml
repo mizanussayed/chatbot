@@ -1,0 +1,62 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<link href="~/css/two-col-form.css" rel="stylesheet" />
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="title">Profile</div>
+<div class="contentRegister">
+    <form id="profile-form" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="user-details">
+            <div class="input-box">
+                <span class="details">First Name</span>
+                <input type="text" asp-for="Input.FirstName" placeholder="Enter your First name" required>
+                <span asp-validation-for="Input.FirstName" class="text-danger small"></span>
+            </div>
+            <div class="input-box">
+                <span class="details">Last Name</span>
+                <input type="text" asp-for="Input.LastName" placeholder="Enter your Last name" required>
+                <span asp-validation-for="Input.LastName" class="text-danger small"></span>
+            </div>
+            <div class="input-box">
+                <span class="details">Username</span>
+                <input type="text" asp-for="Username" placeholder="Enter your username" required readonly>
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+            <div class="input-box">
+                <span class="details">Phone Number</span>
+                <input type="text" asp-for="Input.PhoneNumber" placeholder="Enter your number" required>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger small"></span>
+            </div>
+            <div class="gender-details" style="width: 45%;">
+                <input type="radio" asp-for="Input.Gender" value="Male" id="dot-1">
+                <input type="radio" asp-for="Input.Gender" value="Female" id="dot-2">
+                <span class="gender-title">Gender</span>
+                <div class="category">
+                    <label for="dot-1">
+                        <span class="dot one"></span>
+                        <span class="gender">Male</span>
+                    </label>
+                    <label for="dot-2">
+                        <span class="dot two"></span>
+                        <span class="gender">Female</span>
+                    </label>
+                </div>
+                <span asp-validation-for="Input.Gender" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="button">
+            <input type="submit" value="Save">
+        </div>
+    </form>
+</div>
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial" />
+}

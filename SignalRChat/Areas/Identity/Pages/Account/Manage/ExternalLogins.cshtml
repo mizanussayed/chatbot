@@ -1,0 +1,135 @@
+﻿@page
+@model ExternalLoginsModel
+@{
+    ViewData["Title"] = "Manage your external logins";
+    ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+}
+
+<style>
+    .socialLoginList a i {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .socialLoginList button {
+        text-decoration: none;
+        position: relative;
+        text-align: center;
+        color: #fff;
+        margin-bottom: 10px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: inline-block;
+        border: none;
+    }
+
+        .socialLoginList button i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .socialLoginList button:hover {
+            color: #fff;
+        }
+
+        .socialLoginList button.facebook {
+            background: #3b5998;
+        }
+
+            .socialLoginList button.facebook:hover {
+                background: #344e86;
+            }
+
+        .socialLoginList button.twitter {
+            background: #1da1f2;
+        }
+
+            .socialLoginList button.twitter:hover {
+                background: #0d95e8;
+            }
+
+        .socialLoginList button.google {
+            background: #ea4335 !important;
+        }
+
+            .socialLoginList button.google:hover {
+                background: #e82e1e !important;
+            }
+
+</style>
+
+
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <partial name="_StatusMessage" for="StatusMessage" />
+
+        @if (Model.CurrentLogins?.Count > 0)
+        {
+            <h3 class="title">Registered Logins</h3>
+            <table class="table">
+                <tbody>
+                    @foreach (var login in Model.CurrentLogins)
+                    {
+                        <tr>
+                            <td id="@($"login-provider-{login.LoginProvider}")">@login.ProviderDisplayName</td>
+                            <td>
+                                @if (Model.ShowRemoveButton)
+                                {
+                                    <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
+                                        <div>
+                                            <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                                            <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                                            <button type="submit" class="btn btn-primary" title="Remove this @login.ProviderDisplayName login from your account">Remove</button>
+                                        </div>
+                                    </form>
+                                }
+                                else
+                                {
+                                    @: &nbsp;
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        @if (Model.OtherLogins?.Count > 0)
+        {
+            <h4 class="title">Add another service to log in.</h4>
+            <hr />
+            <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
+                <div class="socialLoginList">
+                    <p>
+                        @foreach (var provider in Model.OtherLogins)
+                        {
+                            @*<button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>*@
+                            if (provider.Name == "Google")
+                            {
+                                <button type="submit" class="btn btn-primary google" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fa-brands fa-google"></i></button>
+                            }
+                            else if (provider.Name == "Facebook")
+                            {
+                                <button type="submit" class="btn btn-secondary facebook" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fa-brands fa-facebook-f"></i></button>
+                            }
+                            else if (provider.Name == "Twitter")
+                            {
+                                <button type="submit" class="btn btn-secondary twitter" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fa-brands fa-twitter"></i></button>
+                            }
+                        }
+                    </p>
+                </div>
+            </form>
+
+        }
+
+    </div>
+</div>

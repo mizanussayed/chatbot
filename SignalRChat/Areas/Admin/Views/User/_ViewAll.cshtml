@@ -1,0 +1,65 @@
+﻿@using SignarlRChat.Areas.Admin.Models;
+@using SignarlRChat.Views.Shared.Components.RoleList;
+@model IEnumerable<ApplicationUserViewModel>
+
+<style>
+    .tblResponse{
+        overflow-x: auto !important;
+    }
+</style>
+<div class="card mt-3" id="userList">
+    <div class="card-header alert-primary">
+        <a asp-action="OnCreateOrEdit" asp-asp-controller="User" class="btn btn-primary"> Create</a>
+    </div>
+    <div class="card-body tblResponse">
+        @if (Model.Any())
+        {
+            <table class="table table-bordered table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td><img src="@(user.ProfilePhotoUrl ?? "/images/no-image.png")" class="img-thumbnail" width="50" height="50" style="vertical-align: central" asp-append-version="true" /></td>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>@(!string.IsNullOrEmpty(user.Roles) ? user.Roles : "No role assigned yet")</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-action="OnCreateOrEdit" asp-route-userId="@user.Id">Edit</a>
+                                        @if (!User.Identity.Name.Equals(user.UserName))
+                                        {
+                                            <form asp-action="OnPostUserDelete" asp-route-userId="@user.Id" onsubmit="return confirm('Do you want to delete user(@user.UserName)?');">
+                                                <button type="submit" class="dropdown-item">Delete</button>
+                                            </form>
+                                        }
+                                        <a class="dropdown-item" asp-action="OnGetUserRoles" asp-route-userId="@user.Id">Manage Role</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h3>No User is in this Role</h3>
+        }
+    </div>
+</div>
