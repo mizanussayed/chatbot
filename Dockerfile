@@ -1,9 +1,10 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+#runtime for framework dependant
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.18  AS base   
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.18 AS build
 WORKDIR /app
 
 COPY "SignalRChat/SignalRChat.csproj" ./
@@ -13,7 +14,7 @@ RUN dotnet restore "SignalRChat.csproj"
 COPY . ./
 
 
-RUN dotnet publish "SignalRChat/SignalRChat.csproj" -c Release -o out
+RUN dotnet publish "SignalRChat.csproj" -c Release -o out --no-restore -p:UseAppHost=false
 
 FROM base as final
 WORKDIR /app

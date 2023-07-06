@@ -13,8 +13,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Ignore bin folder
+# Ignore bin & obj folder
 SignalRChat/bin/
+SignalRChat/obj/
 
 # Build results
 [Dd]ebug/
