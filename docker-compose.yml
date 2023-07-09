@@ -1,20 +1,20 @@
 version: '3.4'
 services:
-    web:
-    image: docker.io/miznaussayed/signalrchat:v8
-    # container_name: web-service
-    build:
-      context: .
-      dockerfile: SignalRchat/Dockerfile
-    environment:  # need to check again
-      - ConnectionStrings_DefaultConnection=Server=db; Database=ChatBot; User ID=sa; Password=Mizanbro48&123; TrustServerCertificate=True; MultipleActiveResultSets=true
-    ports:
-      - "80"
-    depends_on:
-      - db
-    restart: always
-    networks:
-      - appnet
+  web:
+  image: docker.io/miznaussayed/signalrchat:v8
+  # container_name: web-service
+  build:
+    context: .
+    dockerfile: SignalRchat/Dockerfile
+  environment:  # need to check again
+    - ConnectionStrings_DefaultConnection=Server=db; Database=ChatBot; User ID=sa; Password=Mizanbro48&123; TrustServerCertificate=True; MultipleActiveResultSets=true
+  ports:
+    - "80"
+  depends_on:
+    - db
+  restart: always
+  networks:
+    - appnet
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
