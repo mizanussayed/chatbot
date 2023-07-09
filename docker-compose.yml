@@ -1,23 +1,29 @@
 version: '3.4'
 services:
-  web:
+    web:
+    image: docker.io/miznaussayed/signalrchat:v8
+    # container_name: web-service
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: SignalRchat/Dockerfile
+    environment:  # need to check again
+      - ConnectionStrings_DefaultConnection=Server=db; Database=ChatBot; User ID=sa; Password=Mizanbro48&123; TrustServerCertificate=True; MultipleActiveResultSets=true
     ports:
       - "80"
     depends_on:
-     - db
+      - db
+    restart: always
     networks:
       - appnet
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
-      - "1433"
+      - "1434"
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "Mizanbro48&123"
       MSSQL_PID: Express
+    restart: always
     volumes:
       - dbdata:/var/opt/mssql
     networks:

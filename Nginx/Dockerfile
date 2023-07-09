@@ -4,7 +4,7 @@ FROM nginx
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy your custom Nginx configuration
-COPY signalr.conf /etc/nginx/conf.d/
+COPY Nginx/signalr.conf /etc/nginx/conf.d/
 
 # Expose the port
 EXPOSE 80
