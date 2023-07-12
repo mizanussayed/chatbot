@@ -6,16 +6,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
+COPY *.sln .
+COPY SignalRChat/*.csproj ./SignalRChat/
 
-COPY SignalRChat.csproj ./
+RUN dotnet restore 
 
-RUN dotnet restore SignalRChat.csproj --no-cache
+COPY SignalRChat/. ./SignalRChat/
 
-COPY . ./
+RUN dotnet publish -c Release -o out --no-restore -p:UseAppHost=false
 
-RUN dotnet publish SignalRChat.csproj -c Release -o out --no-restore -p:UseAppHost=false
-
-FROM base as fina
+FROM base as final
 WORKDIR /app
 COPY --from=build /app/out .
 

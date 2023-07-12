@@ -123,7 +123,8 @@ namespace SignalRChat.Areas.Identity.Pages.Account.Manage
                 //report.Dictionary.Connections.Add(mssqlConnection);
                 //string path = $@"{_env.WebRootPath}\reports\usersUsingSp.frx";
                 //string path = $@"{_env.WebRootPath}\reports\usersUsingQuery.frx";
-                string path = $@"{_env.WebRootPath}\reports\usersByQueryWithParameter.frx";
+                //string path = $@"{_env.WebRootPath}/reports/usersByQueryWithParameter.frx";
+                string path = System.IO.Path.Combine(_env.WebRootPath, "reports", "usersByQueryWithParameter.frx");
                 report.Report.Load(path);
                 string userName = HttpContext.User.Identity.Name;
                 string loginUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
