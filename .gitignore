@@ -14,8 +14,11 @@
 *.userprefs
 
 # Ignore bin & obj folder
-SignalRChat/bin/
-SignalRChat/obj/
+**/bin/
+**/obj/
+
+
+nginx/logs/
 
 # Build results
 [Dd]ebug/
