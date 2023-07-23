@@ -9,11 +9,11 @@ WORKDIR /app
 COPY *.sln .
 COPY SignalRChat/*.csproj ./SignalRChat/
 
-RUN dotnet restore 
+RUN dotnet restore SignalRChat/SignalRChat.csproj 
 
 COPY SignalRChat/. ./SignalRChat/
 
-RUN dotnet publish -c Release -o out --no-restore -p:UseAppHost=false
+RUN dotnet publish SignalRChat/SignalRChat.csproj -c Release -o out --no-restore -p:UseAppHost=false
 
 FROM base as final
 WORKDIR /app

@@ -1,12 +1,12 @@
 version: '3.4'
 services:
   web:
-    image: docker.io/mizanussayed/chatbot:v5
-    #build:
-    #  context: ./src
-    #  dockerfile: Dockerfile
-    # environment:  # need to check again
-    #   - ConnectionStrings_DefaultConnection=Server=db; Database=ChatBot; User ID=sa; Password=Mizanbro48&123; TrustServerCertificate=True; MultipleActiveResultSets=true
+    # image: docker.io/mizanussayed/chatbot:v5
+    build:
+     context: ./src
+     dockerfile: Dockerfile
+    environment: 
+      - "ConnectionStrings__DefaultConnection=Server=db; Database=ChatBot; User ID=sa; Password=${SA_PASSWORD}; TrustServerCertificate=True; MultipleActiveResultSets=true"
     ports:
       - "80"
     depends_on:
@@ -16,11 +16,13 @@ services:
       - appnet
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux
     ports:
-      - "1434"
+      - "1433"
+
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "Mizanbro48&123"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
       MSSQL_PID: Express
     restart: always
     volumes:
