@@ -13,3 +13,4 @@
 # Ignore Docker files
 Dockerfile*
 **/*.md
+

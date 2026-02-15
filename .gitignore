@@ -345,3 +345,22 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Ignore .NET Core build artifacts / directories
+bin/
+obj/
+.git/
+.gitignore
+.dockerignore
+*.md
+.vscode/
+nginx/
+.github/
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Ignore Docker files
+Dockerfile*
